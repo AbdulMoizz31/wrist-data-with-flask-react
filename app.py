@@ -44,16 +44,17 @@ def get_data():
 
     # Filter notes data
     notes_data['full_date'] = pd.to_datetime(notes_data['full_date'])
-    notes_data['time'] = notes_data['full_date'].dt.time
-    notes_data['date'] = notes_data['full_date'].dt.date.astype(str)
-    notes_filtered = notes_data[notes_data['date'] == date_value]
+    # notes_data['time'] = notes_data['time']
+    # notes_data['full_date'] = notes_data['full_date'].dt.date.astype(str)
+    notes_data['full_date_time'] = pd.to_datetime(notes_data['full_date'].astype(str) + ' ' + notes_data['time'].astype(str))
+    notes_filtered = notes_data[notes_data['full_date'] == date_value]
 
     # Prepare chart data
     chart_data = {
         "x": (hr_filtered['Date'] + " " + hr_filtered['Time']).tolist(),
         "y": hr_filtered['Empatica.mean'].tolist(),
         "annotations": [
-            {"time": row.time.strftime('%H:%M:%S'), "emoji": row.emojis}
+            {"time": str(row.full_date_time), "emoji": row.emojis}
             for _, row in notes_filtered.iterrows()
         ]
     }
@@ -61,7 +62,7 @@ def get_data():
     # Prepare notes data
     notes_list = [
         {
-            "time": row.time.strftime('%H:%M:%S'),
+            "time": row.time,
             "text": row.note,
             "emoji": row.emojis,
         }

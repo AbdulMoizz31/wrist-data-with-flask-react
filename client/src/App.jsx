@@ -45,12 +45,25 @@ const ChartWithNotes = () => {
           ]}
           layout={{
             title: "Heart Rate",
-            // annotations: chartData.annotations.map((ann) => ({
-            //   x: ann.time,
-            //   y: 0,
-            //   text: ann.emoji,
-            //   showarrow: false,
-            // })),
+            shapes: chartData.annotations.map((ann) => ({
+              type: 'line',
+              xref: 'x',
+              yref: 'paper',
+              x0: ann.time,
+              y0: 0,
+              x1: ann.time,
+              y1: 1,
+              line: {
+                color: 'grey',
+                width: 1,
+                dash: 'dot'
+              },
+              label: {
+                text: ann.emoji,
+                font: { size: 32 },
+                textposition:'top center'
+              }
+            }))
           }}
         />
       )}
